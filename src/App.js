@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import ListContainer from './components/Listcontainer'
+import ItemContainer from './components/Itemcontainer'
 import { Grid, Row, Col } from 'react-bootstrap';
 
 class App extends Component {
   componentWillMount() {
-    this.state = {
-      selectedList: null,
+    this.setState({
+      selectedList: 1,
       shoppingLists: [
         {
           name: "First List",
@@ -27,7 +28,7 @@ class App extends Component {
           }],
         }
       ],
-    };
+    });
   }
 
   render() {
@@ -44,7 +45,8 @@ class App extends Component {
               <ListContainer shoppingLists={this.state.shoppingLists} />
             </Col>
             <Col sm={12} md={8}>
-              fdsa
+              <ItemContainer shoppingList={this.state.shoppingLists[this.state.selectedList]} />
+              
             </Col>
           </Row>
         </Grid>
