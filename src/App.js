@@ -31,10 +31,19 @@ class App extends Component {
     });
 
     this.setSelectedList = this.setSelectedList.bind(this);
+    this.setItemDone = this.setItemDone.bind(this);
   }
 
   setSelectedList(selectedList) {
     this.setState({ selectedList });
+  }
+  setItemDone(itemId) {
+    let newShoppingLists = this.state.shoppingLists;
+    let item = newShoppingLists[this.state.selectedList].items[itemId];
+    item.done = !item.done;
+    this.setState({
+      shoppingLists: newShoppingLists
+    })
   }
 
   render() {
@@ -51,8 +60,7 @@ class App extends Component {
               <ListContainer handleClick={this.setSelectedList} shoppingLists={this.state.shoppingLists} />
             </Col>
             <Col sm={12} md={8}>
-              <ItemContainer shoppingList={this.state.shoppingLists[this.state.selectedList]} />
-
+              <ItemContainer handleClick={this.setItemDone} shoppingList={this.state.shoppingLists[this.state.selectedList]} />
             </Col>
           </Row>
         </Grid>
