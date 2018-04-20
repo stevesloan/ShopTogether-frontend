@@ -6,15 +6,16 @@ class Todo extends Component {
 
     componentWillMount() {
 
-        this.handleClick = this.handleClick.bind(this);
+        this._handleClick = this._handleClick.bind(this);
     }
-    handleClick() {
+    _handleClick(item) {
+        this.props.handleClick(item.target.value);
     }
 
     render() {
-        const lists = this.props.shoppingLists.map(list => {
+        const lists = this.props.shoppingLists.map((list, key) => {
             return (
-                <ListGroupItem>{list.name}</ListGroupItem>
+                <ListGroupItem onClick={this._handleClick} key={key} value={key} >{list.name}</ListGroupItem>
             )
         });
         return (

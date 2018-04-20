@@ -29,6 +29,12 @@ class App extends Component {
         }
       ],
     });
+
+    this.setSelectedList = this.setSelectedList.bind(this);
+  }
+
+  setSelectedList(selectedList) {
+    this.setState({ selectedList });
   }
 
   render() {
@@ -42,11 +48,11 @@ class App extends Component {
         <Grid>
           <Row className="show-grid">
             <Col xs={12} md={4}>
-              <ListContainer shoppingLists={this.state.shoppingLists} />
+              <ListContainer handleClick={this.setSelectedList} shoppingLists={this.state.shoppingLists} />
             </Col>
             <Col sm={12} md={8}>
               <ItemContainer shoppingList={this.state.shoppingLists[this.state.selectedList]} />
-              
+
             </Col>
           </Row>
         </Grid>
