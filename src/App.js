@@ -32,6 +32,7 @@ class App extends Component {
 
     this.setSelectedList = this.setSelectedList.bind(this);
     this.setItemDone = this.setItemDone.bind(this);
+    this.onAddList = this.onAddList.bind(this);
   }
 
   setSelectedList(selectedList) {
@@ -46,6 +47,17 @@ class App extends Component {
     })
   }
 
+  onAddList(event) {
+    event.preventDefault();
+    const name = event.target.name.value;
+    let shoppingLists = this.state.shoppingLists;
+    shoppingLists.push({name, items: []})
+    this.setState({
+      shoppingLists
+    });
+    event.target.name.value = '';
+  }
+
   render() {
     return (
       <div className="App">
@@ -58,6 +70,9 @@ class App extends Component {
           <Row className="show-grid">
             <Col xs={12} md={4}>
               <ListContainer handleClick={this.setSelectedList} shoppingLists={this.state.shoppingLists} />
+              <form onSubmit={this.onAddList}>
+                <input type="text" name="name" />
+              </form>
             </Col>
             <Col sm={12} md={8}>
               <ItemContainer handleClick={this.setItemDone} shoppingList={this.state.shoppingLists[this.state.selectedList]} />
