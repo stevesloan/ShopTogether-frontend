@@ -9,7 +9,10 @@ export default class Itemcontainer extends Component {
         this.props.handleClick(item.target.value);
     }
     render() {
-        
+
+        if(typeof this.props.shoppingList === "undefined") {
+            return (<h1>No List Selected</h1>);
+        }
         const items = this.props.shoppingList.items.map((item, key) => {
             return (
                 <ListGroupItem onClick={this._handleClick} value={key} key={key} active={item.done}>

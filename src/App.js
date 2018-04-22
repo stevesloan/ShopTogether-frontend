@@ -8,26 +8,8 @@ import { FormControl, Grid, Row, Col } from 'react-bootstrap';
 class App extends Component {
   componentWillMount() {
     this.setState({
-      selectedList: 1,
-      shoppingLists: [
-        {
-          name: "First List",
-          items: [{
-            name: "Apples",
-            done: false,
-          }],
-        },
-        {
-          name: "Second List",
-          items: [{
-            name: "Bananas",
-            done: false,
-          }, {
-            name: "Plums",
-            done: false,
-          }],
-        }
-      ],
+      selectedList: null,
+      shoppingLists: [],
     });
 
     this.setSelectedList = this.setSelectedList.bind(this);
@@ -48,29 +30,54 @@ class App extends Component {
     })
   }
 
+  validate(input) {
+    let success = true;
+    if (input === "") {
+      success = false;
+    }
+    return success;
+  }
+
   onAddList(event) {
     event.preventDefault();
     const name = event.target.name.value;
-    let shoppingLists = this.state.shoppingLists;
-    shoppingLists.push({ name, items: [] })
-    this.setState({
-      shoppingLists
-    });
-    event.target.name.value = '';
+    if (this.validate(name)) {
+      let shoppingLists = this.state.shoppingLists;
+      shoppingLists.push({ name, items: [] })
+      this.setState({
+        selectedList: shoppingLists.length - 1,
+        shoppingLists
+      });
+      event.target.name.value = '';
+    }
+
   }
 
   onAddItem(event) {
     event.preventDefault();
     const name = event.target.name.value;
-    let items = this.state.shoppingLists[this.state.selectedList].items;
-    items.push({ name, done: false });
-    this.setState({
-      shoppingLists: this.state.shoppingLists
-    });
-    event.target.name.value = '';
+    if (this.validate(name)) {
+      let items = this.state.shoppingLists[this.state.selectedList].items;
+      items.push({ name, done: false });
+      this.setState({
+        shoppingLists: this.state.shoppingLists
+      });
+      event.target.name.value = '';
+    }
   }
 
   render() {
+    let addItem;
+    if (typeof this.state.shoppingLists[this.state.selectedList] !== "undefined") {
+      addItem = (
+        <form onSubmit={this.onAddItem}>
+          <FormControl type="text" name="name" placeholder="New Item Name" />
+        </form>
+      )
+    } else {
+      addItem = (<FormControl type="text" disabled={true} placeholder="New Item Name" />);
+    }
+
     return (
       <div className="App">
         <header className="App-header">
@@ -87,10 +94,8 @@ class App extends Component {
               </form>
             </Col>
             <Col sm={12} md={8}>
-              <ItemContainer show={false} handleClick={this.setItemDone} shoppingList={this.state.shoppingLists[this.state.selectedList]} />
-              <form onSubmit={this.onAddItem}>
-                <FormControl type="text" name="name" placeholder="New Item Name" />
-              </form>
+              <ItemContainer handleClick={this.setItemDone} shoppingList={this.state.shoppingLists[this.state.selectedList]} />
+              {addItem}
             </Col>
           </Row>
         </Grid>
