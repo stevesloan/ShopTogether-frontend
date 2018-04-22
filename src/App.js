@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './css/App.css';
 import ListContainer from './components/Listcontainer'
 import ItemContainer from './components/Itemcontainer'
-import { Grid, Row, Col } from 'react-bootstrap';
+import { FormControl, Grid, Row, Col } from 'react-bootstrap';
 
 class App extends Component {
   componentWillMount() {
@@ -33,6 +33,7 @@ class App extends Component {
     this.setSelectedList = this.setSelectedList.bind(this);
     this.setItemDone = this.setItemDone.bind(this);
     this.onAddList = this.onAddList.bind(this);
+    this.onAddItem = this.onAddItem.bind(this);
   }
 
   setSelectedList(selectedList) {
@@ -51,9 +52,20 @@ class App extends Component {
     event.preventDefault();
     const name = event.target.name.value;
     let shoppingLists = this.state.shoppingLists;
-    shoppingLists.push({name, items: []})
+    shoppingLists.push({ name, items: [] })
     this.setState({
       shoppingLists
+    });
+    event.target.name.value = '';
+  }
+
+  onAddItem(event) {
+    event.preventDefault();
+    const name = event.target.name.value;
+    let items = this.state.shoppingLists[this.state.selectedList].items;
+    items.push({ name, done: false });
+    this.setState({
+      shoppingLists: this.state.shoppingLists
     });
     event.target.name.value = '';
   }
@@ -71,11 +83,14 @@ class App extends Component {
             <Col xs={12} md={4}>
               <ListContainer handleClick={this.setSelectedList} shoppingLists={this.state.shoppingLists} />
               <form onSubmit={this.onAddList}>
-                <input type="text" name="name" />
+                <FormControl type="text" name="name" placeholder="New List Name" />
               </form>
             </Col>
             <Col sm={12} md={8}>
-              <ItemContainer handleClick={this.setItemDone} shoppingList={this.state.shoppingLists[this.state.selectedList]} />
+              <ItemContainer show={false} handleClick={this.setItemDone} shoppingList={this.state.shoppingLists[this.state.selectedList]} />
+              <form onSubmit={this.onAddItem}>
+                <FormControl type="text" name="name" placeholder="New Item Name" />
+              </form>
             </Col>
           </Row>
         </Grid>
